@@ -33,7 +33,7 @@ class TasksController extends Controller
     {
         //
         $task = new Task;
-
+        
         return view('tasks.create', [
             'task' => $task,
         ]);
@@ -54,6 +54,7 @@ class TasksController extends Controller
             ]);
 
         $task = new Task;
+        $task->user_id = \Auth::id();
         $task->status = $request->status;
         $task->content = $request->content;
         $task->save();
@@ -72,9 +73,15 @@ class TasksController extends Controller
         //
         $task = Task::find($id);
 
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+        if (\Auth::id() === $task->user_id){
+            return view('tasks.show', [
+                'task' => $task,
+            ]);
+        }
+        
+        else {
+            return redirect('/');
+        }
     }
 
     /**
@@ -88,10 +95,16 @@ class TasksController extends Controller
         //
         
         $task = task::find($id);
-
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+        
+        if (\Auth::id() === $task->user_id){
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+        }
+        
+        else {
+            return redirect('/');
+        }
     }
 
     /**

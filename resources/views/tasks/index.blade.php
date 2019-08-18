@@ -10,6 +10,7 @@
                 <thead>
                     <tr>
                         <th>id</th>
+                        <th>タスク作成者</th>
                         <th>ステータス</th>
                         <th>タスク</th>
                     </tr>
@@ -18,6 +19,11 @@
                     @foreach ($tasks as $task)
                     <tr>
                         <td>{!! link_to_route('tasks.show', $task->id, ['id' => $task->id]) !!}</td>
+                        @if (\Auth::id() === $task->user_id)
+                            <td>あなた</td>
+                        @else
+                            <td>他のユーザー</td>
+                        @endif
                         <td>{{ $task->status }}</td>
                         <td>{{ $task->content }}</td>
                     </tr>
@@ -30,7 +36,7 @@
     @else
         <div class="center jumbotron">
             <div class="text-center">
-                <h1>Welcome to the Tasklists</h1>
+                <h1>Welcome to the Tasklist</h1>
                 {!! link_to_route('signup.get', 'Sign up now!', [], ['class' => 'btn btn-lg btn-primary']) !!}
             </div>
         </div>
